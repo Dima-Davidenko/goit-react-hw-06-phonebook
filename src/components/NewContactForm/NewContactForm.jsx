@@ -4,7 +4,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import { addContact } from '../../redux/contactsSlice';
-import { getContacts } from '../../redux/selectors';
+import { getContacts } from '../../selectors/selectors';
 import { MyErrorMsg, Wrapper } from './NewContactForm.styled';
 
 const schema = yup.object().shape({
@@ -25,11 +25,11 @@ const schema = yup.object().shape({
 const INITIAL_FORM_VALUES = { name: '', number: '' };
 
 function NewContactForm() {
-  const contacts = useSelector(getContacts);
+  const { items } = useSelector(getContacts);
   const dispatch = useDispatch();
 
   const handleSubmit = ({ name, number }, { setSubmitting, resetForm }) => {
-    if (contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase())) {
+    if (items.some(contact => contact.name.toLowerCase() === name.toLowerCase())) {
       alert('Контакт з таким іменем вже існує');
       setSubmitting(false);
       return;

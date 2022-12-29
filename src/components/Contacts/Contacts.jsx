@@ -13,13 +13,13 @@ import {
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact } from '../../redux/contactsSlice';
-import { getContacts, getFilter } from '../../redux/selectors';
+import { getContacts, getFilter } from '../../selectors/selectors';
 
 function Contacts({ children }) {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const { items } = useSelector(getContacts);
   const filter = useSelector(getFilter);
-  const filteredContacts = contacts.filter(({ name }) => name.toLowerCase().includes(filter));
+  const filteredContacts = items.filter(({ name }) => name.toLowerCase().includes(filter));
   return (
     <div>
       {children}
