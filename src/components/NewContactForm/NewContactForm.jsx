@@ -1,8 +1,10 @@
 import { Button, TextField } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
-import PropTypes from 'prop-types';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
+import { addContact } from '../../redux/contactsSlice';
+import { getContacts } from '../../redux/selectors';
 import { MyErrorMsg, Wrapper } from './NewContactForm.styled';
 
 const schema = yup.object().shape({
@@ -22,10 +24,18 @@ const schema = yup.object().shape({
 
 const INITIAL_FORM_VALUES = { name: '', number: '' };
 
-function NewContactForm({ addContact }) {
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+function NewContactForm() {
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
+
+  const handleSubmit = ({ name, number }, { setSubmitting, resetForm }) => {
+    if (contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase())) {
+      alert('Контакт з таким іменем вже існує');
+      setSubmitting(false);
+      return;
+    }
     resetForm();
-    addContact(values);
+    dispatch(addContact(name, number));
     setSubmitting(false);
   };
   return (
@@ -64,9 +74,5 @@ function NewContactForm({ addContact }) {
     </div>
   );
 }
-
-NewContactForm.propTypes = {
-  addContact: PropTypes.func.isRequired,
-};
 
 export default NewContactForm;

@@ -1,13 +1,15 @@
 import { TextField } from '@mui/material';
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateFilter } from '../../redux/filterSlice';
 
-export const Filter = ({ setFilter }) => {
+export const Filter = () => {
+  const dispatch = useDispatch();
   const [value, setValue] = useState('');
 
   const handleInputChange = ({ target }) => {
     setValue(target.value);
-    setFilter(target.value.toLowerCase());
+    dispatch(updateFilter(target.value.toLowerCase()));
   };
 
   return (
@@ -21,7 +23,5 @@ export const Filter = ({ setFilter }) => {
     />
   );
 };
-Filter.propTypes = {
-  setFilter: PropTypes.func.isRequired,
-};
+
 export default Filter;
